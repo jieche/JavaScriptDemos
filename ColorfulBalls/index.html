@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Canvas学习</title>
-    <style type="text/css">
+    <style>
         *{
             margin: 0;
             padding: 0;
@@ -18,19 +18,23 @@
 <canvas></canvas>
 <script type="text/javascript">
     //使用DOM方法得到画布
-    var mycanvas = document.querySelector("canvas");
+    const mycanvas = document.querySelector("canvas");
     //使用画布的上下文
     var ctx = mycanvas.getContext("2d");
     //设置画布满屏
     mycanvas.width = document.documentElement.clientWidth;
     mycanvas.height = document.documentElement.clientHeight;
 
+
+    //小球数组
+    let ballsArr = [];
+
     //小球类
     function Ball(x,y){
         this.x = x;		//圆心坐标x
         this.y = y;		//圆心坐标y
         this.r = 30;	//半径
-        this.color = "rgba(" + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + "," + parseInt(Math.random() * 256) + ",0.8)";	//颜色
+        this.color = `rgba(${parseInt(Math.random() * 256)},${parseInt(Math.random() * 256)},${parseInt(Math.random() * 256)},0.8)`;	//颜色
         //运动的变化值
         this.dx = parseInt(Math.random() * 18) - 9;	//x的变化值
         this.dy = parseInt(Math.random() * 18) - 9;	//y的变化值
@@ -57,15 +61,12 @@
     //自杀方法
     Ball.prototype.godie = function(){
         //从小球数组中检索自己，将自己删除
-        for (var i = 0; i < ballsArr.length; i++) {
+        for (let i = 0; i < ballsArr.length; i++) {
             if(ballsArr[i] === this){
                 ballsArr.splice(i,1);
             }
         };
     }
-
-    //小球数组
-    var ballsArr = [];
 
     //监听，当我们移动鼠标的时候new出小球
     mycanvas.onmousemove = function(event){
@@ -73,7 +74,7 @@
         new Ball(event.clientX , event.clientY)
     }
 
-    var fno = 0;
+    let fno = 0;
     //定时器
     setInterval(function(){
         //清屏
@@ -83,7 +84,7 @@
         ctx.fillText(fno, 20,20);
 
         //渲染、更新所有小球
-        for (var i = 0; i < ballsArr.length; i++) {
+        for (let i = 0; i < ballsArr.length; i++) {
             ballsArr[i].update();
             //因为update可能会删除这个小球（半径小于0），所以要验证一下这个小球是否存在
             ballsArr[i] && ballsArr[i].render();
